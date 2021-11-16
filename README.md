@@ -1,5 +1,10 @@
 # istio-wasm-api-demo
 
+## 0. Install TinyGo
+
+Follow the [instructions](https://tinygo.org/getting-started/install/linux/) to install the tinygo.
+We will use this to compile golang program into WASM module.
+
 ## 1. Setup the latest Istio
 
 0. Setup k8s cluster: e.g. `kind create cluster --name test`
@@ -117,7 +122,7 @@ docker push ${WASM_EXTENSION_REGISTRY}:v1
 1. Apply the new Wasm Plugin API pointing to the Docker image.
 
 ```
-$ echo 'apiVersion: extensions.istio.io/v1alpha1
+$ echo "apiVersion: extensions.istio.io/v1alpha1
 kind: WasmPlugin
 metadata:
   name: header-injection
@@ -126,8 +131,8 @@ spec:
   selector:
     matchLabels:
       app: httpbin
-  url: oci://ghcr.io/mathetake/wasm-extension-demo:v1
-' | kubectl apply -f -
+  url: oci://${WASM_EXTENSION_REGISTRY}:v1
+" | kubectl apply -f -
 ```
 
 2. Check if the header injection works!
